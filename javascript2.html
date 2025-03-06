@@ -6,11 +6,16 @@
 
 
 <script>
+  
+
+
+const another_function = function() {        }
+
 
 function some_function(some_argument) {
 
-console.log('its some function');
-console.log(some_argument);
+window.console.log('its some function');
+window.console.log(some_argument);
 
     }
 
@@ -19,6 +24,7 @@ y= some_function();
 
 window.onload=some_function; //если не нужен аргумент
 
+//привязка к событию - когда оно произойдет, тогда запустится функция
     window.onload = function() {
     
     some_function(some_argument);  // возможность использовать аргумент
