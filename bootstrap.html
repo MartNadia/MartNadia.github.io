@@ -59,8 +59,30 @@
             <div class="col bg-primary">3</div>
             <div class="col bg-info">4</div>
         </div>
+
+        <div class="row">
+          <div class="col">
+            <table class="table table-bordered">
+              <tbody id="myTableBody"></tbody>
+            </table>
+          </div>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
- 
+    <script>
+      function createLargeTable() {
+        const tableBody = document.getElementById('myTableBody');
+
+        for (let i = 0; i < 100; i++) {
+          const row = tableBody.insertRow();
+          for (let j = 0; j < 100; j++) {
+            const cell = row.insertCell();
+            cell.textContent = `Row ${i + 1}, Cell ${j + 1}`;
+          }
+        }
+      }
+
+      createLargeTable();
+    </script>
 </body>
 </html>
