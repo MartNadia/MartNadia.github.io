@@ -14,23 +14,35 @@
     <a href="page4.html">Страница 4</a>
     <a href="bootstrap.html">Bootstrap</a>
     <a href="table100.html">The 100 table</a>
-    <h1>Главная</h1>
-    <table border="1">
-        <tr>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Birthday</th>
-        </tr>
-        <tr>
-            <td>Nadia</td>
-            <td>Martynova</td>
-            <td>22.11.2007</td>
-        </tr>
-        <tr>
-            <td>Marina</td>
-            <td>Ivanova</td>
-            <td>12.10.2003</td>
-        </tr>
-    </table>
+    <h1>Chat:</h1>
+    <div id="chat"></div>
+
+    <script>
+      function generateChatLog(names, messages) {
+        const chatLog = [];
+        for (let i = 0; i < 10; i++) {
+          const time = `${Math.floor(Math.random() * 24)}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`;
+          const name = names[Math.floor(Math.random() * names.length)];
+          const message = messages[Math.floor(Math.random() * messages.length)];
+          chatLog.push(`<span class="time">${time}</span> <span class="name">${name}</span> : ${message}`);
+        }
+        return chatLog;
+      }
+
+      const names = ["Alice", "Bob", "Charlie", "David", "Eve"];
+      const messages = ["Hello!","Hi!","How are you?","How is your day?","What's up?","I'm fine. You?",
+        "Great, thank you", "Bye","See you"];
+
+
+      const chat = generateChatLog(names, messages);
+
+      const chatContainer = document.getElementById("chat");
+
+      let chatHTML = "";
+      chat.forEach(line => {
+        chatHTML += `<p>${line}</p>`;
+      });
+      chatContainer.innerHTML = chatHTML;
+    </script>
 </body>
 </html>
