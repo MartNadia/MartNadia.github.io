@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+/*class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
@@ -31,29 +34,37 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  Color _incrementButtonColor = Colors.blue; 
+  Color _incrementButtonColor = Colors.blue;
   Color _decrementButtonColor = Colors.blue;
 
-  void _incrementCounter() {
+  final Duration _colorChangeDuration = const Duration(milliseconds: 200);
+
+  Future<void> _incrementCounter() async {
     setState(() {
       _counter++;
       _incrementButtonColor = Colors.green;
-
-      setState(() {
-         _incrementButtonColor = Colors.blue;
-      });
     });
+
+    await Future.delayed(_colorChangeDuration);
+    if (mounted) { 
+      setState(() {
+        _incrementButtonColor = Colors.blue;
+      });
+    }
   }
 
-  void _decrementCounter() {
+  Future<void> _decrementCounter() async {
     setState(() {
       _counter--;
       _decrementButtonColor = Colors.red;
+    });
 
+    await Future.delayed(_colorChangeDuration);
+    if (mounted) { 
       setState(() {
         _decrementButtonColor = Colors.blue;
       });
-    });
+    }
   }
 
   @override
@@ -92,6 +103,270 @@ class _MyHomePageState extends State<MyHomePage> {
             child: const Icon(Icons.add),
           ),
         ],
+      ),
+    );
+  }
+}*/
+
+/*class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Structure Example'),
+        ),
+        body: Center(
+          child: MyStructure(),
+        ),
+      ),
+    );
+  }
+}
+
+class MyStructure extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+       decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 2),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 30,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                ),
+              ),
+              Container(
+                width: 80,
+                height: 30,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.white, 
+                    border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                height: 30,
+                width: 1,
+                color: Colors.black,
+              ),
+               Container(
+                height: 30,
+                width: 1,
+                color: Colors.black,
+              ),
+                Container(
+                height: 30,
+                width: 1,
+                color: Colors.black,
+              ),
+               Container(
+                height: 30,
+                width: 1,
+                color: Colors.black,
+              ),
+                Container(
+                height: 30,
+                width: 1,
+                color: Colors.black,
+              ),
+            ],
+          ),
+
+           Container(
+            height: 40,
+            decoration: const BoxDecoration(
+              color: Colors.red,
+               border: Border(bottom: BorderSide(color: Colors.black, width: 2)),
+             ),
+          ),
+           Container(
+            height: 30,
+             decoration: const BoxDecoration(
+               color: Colors.white,
+             ),
+          ),
+        ],
+      ),
+    );
+  }
+}*/
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Image Example',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Image Example'),
+        ),
+        body: const ImageExamples(),
+      ),
+    );
+  }
+}
+
+class ImageExamples extends StatefulWidget {
+  const ImageExamples({super.key});
+
+  @override
+  State<ImageExamples> createState() => _ImageExamplesState();
+}
+
+class _ImageExamplesState extends State<ImageExamples> {
+  String _dataFromApi = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDataFromApi();
+  }
+
+  Future<void> _fetchDataFromApi() async {
+    final url = Uri.parse('https://jsonplaceholder.typicode.com/posts');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final decodedData = jsonDecode(response.body);
+        setState(() {
+          _dataFromApi = 'Data from API: ${decodedData.toString()}';
+        });
+      } else {
+        setState(() {
+          _dataFromApi = 'Failed to load data. Status code: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+          _dataFromApi = 'An error occurred: $e';
+        });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Image.asset:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Image.asset('assets/img.jpg'), // Replace with your actual asset path
+            const SizedBox(height: 24),
+
+            const Text(
+              'Image.network:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Image.network(
+              'https://avatars.mds.yandex.net/get-mpic/5288539/img_id7831558020096983321.jpeg/orig',
+              loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                }
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                return const Text('Failed to load image');
+              },
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Data from API:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _dataFromApi,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
